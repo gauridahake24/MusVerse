@@ -11,10 +11,17 @@
         body {
             background-color: rgb(0, 0, 0);
         }
+        .carousel-item {
+            height: 30rem; 
+          }
+        .carousel-caption{
+            background-color: black;
+            border-radius: 25px;
+        }
         
         h1 {
             margin-left: 5rem;
-            margin-top: 1rem;
+            margin-top: 2rem;
             margin-bottom: 1rem;
             color: aliceblue;
         }
@@ -65,6 +72,45 @@
             </div>
         </div>
     </nav>
+<div class = "container-fluid  px-0 ">
+    <div id="carouselExampleCaptions" class="carousel slide">
+        <div class="carousel-indicators">
+          <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+          <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+          <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="static/music1.jpg" class="d-block w-100" alt="...">
+            <div class="carousel-caption d-none d-md-block">
+              <h5>Discover</h5>
+              <p>Unlock a World of New Music</p>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <img src="static/music2.jpg" class="d-block w-100" alt="...">
+            <div class="carousel-caption d-none d-md-block">
+              <h5>Browse</h5>
+              <p>Browse, Play, Repeat - Your Musical Journey Starts Here</p>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <img src="static/music3.jpg" class="d-block w-100" alt="...">
+            <div class="carousel-caption d-none d-md-block">
+              <h5>Favorites</h5>
+              <p>Love It, Save It, Play It - Your Personal Soundtrack</p>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
     <!-- <div class="container">
         <div class="row">
             <div class="col">
@@ -133,6 +179,64 @@
     </div>
 
     <h1> Popular Albums</h1>
+    <div class="container">
+        <div class="row gy-3">
+            <div class="col-md-3">
+                <div class="card card-xs">
+                    <img src="static/image1.jpg" class="card-img-top" alt="image" />
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">
+                            Artist: ABC
+                        </p>
+                        <a href="#" class="btn btn-success">Play Song</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card card-xs">
+                    <img src="static/image1.jpg" class="card-img-top" alt="image" />
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">
+                            Artist: ABC
+
+                        </p>
+                        <a href="#" class="btn btn-success">Play Song</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card card-xs">
+                    <img src="static/image1.jpg" class="card-img-top" alt="image" />
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">
+                            Artist: ABC
+                        </p>
+                        <a href="#" class="btn btn-success">Play Song</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card card-xs">
+                    <img src="static/image1.jpg" class="card-img-top" alt="image" />
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">
+                            Artist: ABC
+                        </p>
+                        <a href="#" class="btn btn-success">Play Song</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 text-end">
+                <button class="btn btn-success">Show More</button>
+            </div>
+        </div>
+    </div>
+
+    <h1>Recommended Songs</h1>
     <div class="container">
         <div class="row gy-3">
             <div class="col-md-3">
