@@ -5,6 +5,9 @@ from django.shortcuts import HttpResponse
 def home(request):
     return render(request, "home.html")
 
+def artist(request):
+    return render(request, "artist_page.html")
+
 def playlist(request):
     return HttpResponse("hello this is playlist")
 
