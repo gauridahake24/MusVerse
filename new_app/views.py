@@ -36,7 +36,7 @@ def playlist(request):
 def liked_songs(request):
     return HttpResponse("hello this is liked songs")
 
-def login(request):
+def log_in(request):
     return render(request, "log_in.html")
 
 # Create your views here.
