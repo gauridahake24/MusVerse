@@ -8,6 +8,12 @@ def home(request):
 def artist(request):
     return render(request, "artist_page.html")
 
+def login(request):
+    return render(request, "log_in.html")
+    
+def albums(request):
+    return render(request, "albums.html")
+
 def playlist(request):
     return HttpResponse("hello this is playlist")
 

@@ -7,6 +7,8 @@ urlpatterns = [
     path("",views.home, name ="home"),
     path("playlist/",views.playlist, name ="playlist"),
     path("liked_songs",views.liked_songs, name = "liked_songs"),
-    path("artist",views.artist, name = "liked_songs")
+    path("artist",views.artist, name = "liked_songs"),
+    path("log_in",views.login, name = "log_in"),
+    path("albums",views.albums, name = "albums")
     
 ]
