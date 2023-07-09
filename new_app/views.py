@@ -50,8 +50,6 @@ def login(request):
             response.set_cookie('username', arr.username)
             response.set_cookie('login_status', True)
             return response
-
-
     return render(request, "log_in.html")
 
 # Create your views here.
