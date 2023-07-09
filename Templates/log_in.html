@@ -54,7 +54,7 @@
         <div class="tab-content" id="authTabContent">
           <!-- Login Form -->
           <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="loginTab">
-            <form method = "post" action = "/">
+            <form method = "post" action = "#">
               {% csrf_token %}
               <div class="mt-4 mb-3">
                 <label for="loginEmail" class="form-label">Email</label>
@@ -73,11 +73,11 @@
             <form>
               <div class="mt-4 mb-3">
                 <label for="registerEmail" class="form-label">Email</label>
-                <input type="email" class="form-control" id="registerEmail" placeholder="Enter your email">
+                <input type="email" class="form-control" id="registerEmail" placeholder="Enter your email" name='email'>
               </div>
               <div class="mb-3">
                 <label for="registerPassword" class="form-label">Password</label>
-                <input type="password" class="form-control" id="registerPassword" placeholder="Enter your password">
+                <input type="password" class="form-control" id="registerPassword" placeholder="Enter your password" name='password'>
               </div>
               <button type="submit" class="btn btn-primary">Register</button>
             </form>

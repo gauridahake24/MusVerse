@@ -8,7 +8,7 @@ urlpatterns = [
     path("playlist/",views.playlist, name ="playlist"),
     path("liked_songs",views.liked_songs, name = "liked_songs"),
     path("artist",views.artist, name = "artist"),
-    path("log_in",views.log_in, name = "log_in"),
+    path("login",views.login, name = "login"),
     path("albums",views.albums, name = "albums")
     
 ]
