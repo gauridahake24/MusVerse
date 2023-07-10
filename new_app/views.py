@@ -2,6 +2,9 @@ from django.shortcuts import render, reverse
 from django.shortcuts import HttpResponse
 from django.http import HttpResponseRedirect
 from .models import User
+from .models import Artist
+from datetime import timedelta
+
 
 
 
@@ -28,10 +31,22 @@ def home(request):
     return render(request, "home.html", context)
 
 def artist(request):
+    if request.method == 'POST':
+        artist_name = request.POST.get('artist_name')
+        song_name = request.POST.get('song_name')
+        songaudio_file = request.FILES.get('songaudio_file')
+        extension = str(songaudio_file).split(".")  
+        if extension[1] != "mp3":
+            return render(request, "home.html")
+        # duration = request.POST.get('duration')
+    
+        
+        new_artist = Artist(artist_name=artist_name, song_name=song_name, songaudio_file=songaudio_file)
+        new_artist.save()
+        
+        return render(request, "home.html")
+    
     return render(request, "artist_page.html")
-
-def login(request):
-    return render(request, "log_in.html")
     
 def albums(request):
     return render(request, "albums.html")

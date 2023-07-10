@@ -1,11 +1,12 @@
 from django.db import models
 
-class artist(models.Model):
+class Artist(models.Model):
     artist_id = models.AutoField(primary_key=True)
     artist_name = models.CharField(max_length=30)
     song_name = models.CharField(max_length=30)
     songaudio_file = models.FileField(upload_to='audio/')
-    duration = models.DurationField(null=True, blank=True)
+    # duration = models.IntegerField()
+
 
     def __str__(self):
         return str(self.artist_id)
@@ -23,8 +24,6 @@ class artist(models.Model):
         return self.songaudio_file.url
 
 
-from django.db import models
-
 class Song(models.Model):
     song_id = models.AutoField(primary_key=True)
     song_artist = models.CharField(max_length=30)
@@ -37,9 +36,9 @@ class Song(models.Model):
 
 class User(models.Model):
     userid = models.AutoField(primary_key=True)
-    username = models.CharField(max_length=30)
+    username = models.CharField(max_length=50)
     mobile_no = models.BigIntegerField()
-    email = models.CharField(max_length=30)
+    email = models.CharField(max_length=70)
     country = models.CharField(max_length=50)
     liked_songs = models.ManyToManyField(Song)
 
@@ -65,8 +64,6 @@ class User(models.Model):
 
 # class guest(models.Model):
 #     guestid = models.AutoField(primary_key=True)
-
-
 
 
 # class playlist(models.Model):
