@@ -21,7 +21,9 @@ def home(request):
             arr = User.objects.filter(email = email)[0]
             context['username'] = arr.username
             print(context['username'])
-
+            context['name'] = arr.username
+            context['id'] = arr.userid
+            print(context['name'])
         
     return render(request, "home.html", context)
 
