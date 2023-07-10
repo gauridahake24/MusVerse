@@ -30,6 +30,7 @@ class Song(models.Model):
     song_duration = models.DecimalField(max_digits=5, decimal_places=2)
     popularity = models.BigIntegerField()
 
+
     def __str__(self):
         return f"Song: {self.song_id}, Artist: {self.song_artist}"
 
