@@ -27,6 +27,7 @@ class Artist(models.Model):
 class Song(models.Model):
     song_id = models.AutoField(primary_key=True)
     song_artist = models.CharField(max_length=30)
+    song_name = models.CharField(max_length=30)
     song_duration = models.DecimalField(max_digits=5, decimal_places=2)
     popularity = models.BigIntegerField()
 

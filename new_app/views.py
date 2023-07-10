@@ -5,6 +5,7 @@ from .models import User
 from .models import Artist
 from datetime import timedelta
 import magic
+from .models import Song
 
 
 
@@ -88,4 +89,22 @@ def logout(request):
     response.delete_cookie('login_status')
 
     return response
+
+def search(request):
+    context = {}
+
+    if request.method == 'POST':
+        val = request.POST.get('val')
+        count = 1
+        if len(Song.objects.filter(song_name__icontains = val).order_by('-popularity'))!=0:
+            context['data'] = []
+            arr = Song.objects.filter(song_name__icontains = val).order_by('-popularity')
+            for i in arr:
+                temp = {"Song": i.song_name, "Artist": i.song_artist, "Popularity": i.popularity}
+                context['data'].append(temp)
+            print(context)
+            return render(request, "search.html", context)
+    
+
+    return render(request, "search.html")
 # Create your views here.
