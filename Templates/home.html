@@ -48,7 +48,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#" style="color: white;">Logout</a>
+                        <a class="nav-link active" aria-current="page" href="{% url 'logout' %}" style="color: white;">Logout</a>
                     </li>
 
                     <li class="nav-item">
@@ -74,8 +74,9 @@
 
                     <div class="username">
                         <h4 style="color: white; margin-left: 1rem; font-size: medium;margin-right: 1rem;margin-top: 0.5rem;">
-                            {% if name %}
-                            {{name}}
+
+                            {% if username %}
+                            {{username}}
                             {% else %}
                             <a href="/login">Login</a>
                             {% endif %}
