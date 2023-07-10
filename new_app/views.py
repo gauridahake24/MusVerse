@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from .models import User
 from .models import Artist
 from datetime import timedelta
-
+import magic
 
 
 
@@ -35,9 +35,19 @@ def artist(request):
         artist_name = request.POST.get('artist_name')
         song_name = request.POST.get('song_name')
         songaudio_file = request.FILES.get('songaudio_file')
-        extension = str(songaudio_file).split(".")  
-        if extension[1] != "mp3":
-            return render(request, "home.html")
+        extension = magic.from_buffer(songaudio_file.read(), mime=True).split("/")[1] 
+        print(extension)   
+        if extension not in ["mp3", "wav", "midi"]:
+            return HttpResponse(
+                """
+                <h1>
+                Uploaded file is not an audio! 
+                Kindly upload an audio file! 
+                Gauri ha error redirect kar context dictionary madhe pass karun to the appropriate template <br>
+                Cheers!
+                </h1
+                >"""
+            )
         # duration = request.POST.get('duration')
     
         
