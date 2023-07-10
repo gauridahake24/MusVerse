@@ -8,6 +8,7 @@ urlpatterns = [
     path("playlist/",views.playlist, name ="playlist"),
     path("liked_songs",views.liked_songs, name = "liked_songs"),
     path("artist",views.artist, name = "liked_songs"),
-    path("login",views.login, name = "login")
+    path("login",views.login, name = "login"),
+    path("logout", views.logout, name = "logout"),
     
 ]

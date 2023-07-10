@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, reverse
 from django.shortcuts import HttpResponse
 from django.http import HttpResponseRedirect
 from .models import User
@@ -7,15 +7,20 @@ from .models import User
 
 # Create your views here.
 def home(request):
+    global context
     context = {}
+    if 'login_status' in request.COOKIES and 'username' in request.COOKIES:
+        context['login_status'] = request.COOKIES.get('login_status')
+        context['username'] = request.COOKIES['username']
+        return render(request, "home.html", context)
+
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
         if len(User.objects.filter(email = email))!=0:
             arr = User.objects.filter(email = email)[0]
-            context['name'] = arr.username
-            context['id'] = arr.userid
-            print(context['name'])
+            context['username'] = arr.username
+            print(context['username'])
 
         
     return render(request, "home.html", context)
@@ -30,14 +35,12 @@ def liked_songs(request):
     return HttpResponse("hello this is liked songs")
 
 def login(request):
-    context = {}
-
     if request.method == 'POST':
         email = request.POST.get('email')
         # password = request.POST.get('password')
         if len(User.objects.filter(email = email))!=0:
             arr = User.objects.filter(email = email)[0]
-            context['name'] = arr.username
+            context['username'] = arr.username
             context['id'] = arr.userid
     
             response = render(request, 'home.html', context)
@@ -48,4 +51,10 @@ def login(request):
 
     return render(request, "log_in.html")
 
+def logout(request):
+    response = HttpResponseRedirect(reverse('login'))
+    response.delete_cookie('username')
+    response.delete_cookie('login_status')
+
+    return response
 # Create your views here.
