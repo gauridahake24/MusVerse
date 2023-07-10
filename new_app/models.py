@@ -57,6 +57,10 @@ class User(models.Model):
 
     def __str__(self):
         return self.username
+    
+    def __str__(self):
+        return str(self.userid)
+
 
 
 # class guest(models.Model):
