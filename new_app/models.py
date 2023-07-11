@@ -20,9 +20,6 @@ class Artist(models.Model):
         else:
             return "Unknown"
 
-    def get_file_url(self):
-        return self.songaudio_file.url
-
 
 class Song(models.Model):
     song_id = models.AutoField(primary_key=True)
@@ -30,6 +27,7 @@ class Song(models.Model):
     song_name = models.CharField(max_length=30)
     song_duration = models.DecimalField(max_digits=5, decimal_places=2)
     popularity = models.BigIntegerField()
+
 
     def __str__(self):
         return f"Song: {self.song_id}, Artist: {self.song_artist}"

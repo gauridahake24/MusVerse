@@ -38,26 +38,14 @@ def artist(request):
         songaudio_file = request.FILES.get('songaudio_file')
         extension = magic.from_buffer(songaudio_file.read(), mime=True).split("/")[1] 
         print(extension)   
-        if extension not in ["mp3", "wav", "midi"]:
-            return HttpResponse(
-                """
-                <h1>
-                Uploaded file is not an audio! 
-                Kindly upload an audio file! 
-                Gauri ha error redirect kar context dictionary madhe pass karun to the appropriate template <br>
-                Cheers!
-                </h1
-                >"""
-            )
-        # duration = request.POST.get('duration')
-    
+        if extension not in ["mpeg","mp3", "wav", "midi"]:
+            return render(request, "home.html")
+        else:
+            new_artist = Artist(artist_name=artist_name, song_name=song_name, songaudio_file=songaudio_file)
+            new_artist.save()
         
-        new_artist = Artist(artist_name=artist_name, song_name=song_name, songaudio_file=songaudio_file)
-        new_artist.save()
-        
-        return render(request, "home.html")
-    
     return render(request, "artist_page.html")
+
     
 def albums(request):
     return render(request, "albums.html")
