@@ -5,6 +5,7 @@ from .models import User
 from .models import Artist
 from datetime import timedelta
 import magic
+from .models import Song
 
 
 
@@ -37,26 +38,14 @@ def artist(request):
         songaudio_file = request.FILES.get('songaudio_file')
         extension = magic.from_buffer(songaudio_file.read(), mime=True).split("/")[1] 
         print(extension)   
-        if extension not in ["mp3", "wav", "midi"]:
-            return HttpResponse(
-                """
-                <h1>
-                Uploaded file is not an audio! 
-                Kindly upload an audio file! 
-                Gauri ha error redirect kar context dictionary madhe pass karun to the appropriate template <br>
-                Cheers!
-                </h1
-                >"""
-            )
-        # duration = request.POST.get('duration')
-    
+        if extension not in ["mpeg","mp3", "wav", "midi"]:
+            return render(request, "home.html")
+        else:
+            new_artist = Artist(artist_name=artist_name, song_name=song_name, songaudio_file=songaudio_file)
+            new_artist.save()
         
-        new_artist = Artist(artist_name=artist_name, song_name=song_name, songaudio_file=songaudio_file)
-        new_artist.save()
-        
-        return render(request, "home.html")
-    
     return render(request, "artist_page.html")
+
     
 def albums(request):
     return render(request, "albums.html")
@@ -88,4 +77,22 @@ def logout(request):
     response.delete_cookie('login_status')
 
     return response
+
+def search(request):
+    context = {}
+
+    if request.method == 'POST':
+        val = request.POST.get('val')
+        count = 1
+        if len(Song.objects.filter(song_name__icontains = val).order_by('-popularity'))!=0:
+            context['data'] = []
+            arr = Song.objects.filter(song_name__icontains = val).order_by('-popularity')
+            for i in arr:
+                temp = {"Song": i.song_name, "Artist": i.song_artist, "Popularity": i.popularity}
+                context['data'].append(temp)
+            print(context)
+            return render(request, "search.html", context)
+    
+
+    return render(request, "search.html")
 # Create your views here.
