@@ -6,7 +6,8 @@ from .models import Artist
 from datetime import timedelta
 import magic
 from .models import Song
-
+import boto3
+from django.conf import settings
 
 
 # Create your views here.
@@ -43,8 +44,19 @@ def artist(request):
         if extension not in ["mpeg", "mp3", "wav", "midi"]:
             return render(request, "home.html")
 
+        # Upload audio file to S3
+        s3 = boto3.client('s3', aws_access_key_id=settings.AWS_ACCESS_KEY_ID, aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
+        s3_key = f'audio/{songaudio_file.name}'
+        s3.upload_fileobj(songaudio_file, settings.AWS_STORAGE_BUCKET_NAME, s3_key)
+
+        # Generate the URN
+        songaudio_file_urn = f's3://{settings.AWS_STORAGE_BUCKET_NAME}/{s3_key}'
+
+        # Create the Artist object
         artist, created = Artist.objects.get_or_create(artist_name=artist_name)
-        song = Song.objects.create(song_artist=artist, song_name=song_name, popularity=0, songaudio_file=songaudio_file)
+
+        # Create the Song object
+        song = Song.objects.create(song_artist=artist, song_name=song_name, popularity=0, songaudio_file_urn=songaudio_file_urn)
 
     return render(request, "artist_page.html")
 
