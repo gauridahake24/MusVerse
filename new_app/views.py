@@ -36,14 +36,16 @@ def artist(request):
         artist_name = request.POST.get('artist_name')
         song_name = request.POST.get('song_name')
         songaudio_file = request.FILES.get('songaudio_file')
-        extension = magic.from_buffer(songaudio_file.read(), mime=True).split("/")[1] 
-        print(extension)   
-        if extension not in ["mpeg","mp3", "wav", "midi"]:
+
+        extension = magic.from_buffer(songaudio_file.read(), mime=True).split("/")[1]
+        print(extension)
+
+        if extension not in ["mpeg", "mp3", "wav", "midi"]:
             return render(request, "home.html")
-        else:
-            new_artist = Artist(artist_name=artist_name, song_name=song_name, songaudio_file=songaudio_file)
-            new_artist.save()
-        
+
+        artist, created = Artist.objects.get_or_create(artist_name=artist_name)
+        song = Song.objects.create(song_artist=artist, song_name=song_name, popularity=0, songaudio_file=songaudio_file)
+
     return render(request, "artist_page.html")
 
     
