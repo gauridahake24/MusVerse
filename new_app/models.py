@@ -1,36 +1,22 @@
 from django.db import models
-
+from django.utils import timezone
 class Artist(models.Model):
     artist_id = models.AutoField(primary_key=True)
     artist_name = models.CharField(max_length=30)
-    song_name = models.CharField(max_length=30)
-    songaudio_file = models.FileField(upload_to='audio/')
-    # duration = models.IntegerField()
-
-
-    def __str__(self):
-        return str(self.artist_id)
 
     def __str__(self):
         return self.artist_name
 
-    def get_song_duration(self):
-        if self.duration:
-            return str(self.duration)
-        else:
-            return "Unknown"
-
-
 class Song(models.Model):
     song_id = models.AutoField(primary_key=True)
-    song_artist = models.CharField(max_length=30)
+    song_artist = models.ForeignKey(Artist, on_delete=models.CASCADE, related_name='uploaded_songs')
     song_name = models.CharField(max_length=30)
-    song_duration = models.DecimalField(max_digits=5, decimal_places=2)
+    song_duration = models.DecimalField(max_digits=5, decimal_places=2, null=True)
     popularity = models.BigIntegerField()
-
+    songaudio_file = models.FileField(upload_to='audio/')
 
     def __str__(self):
-        return f"Song: {self.song_id}, Artist: {self.song_artist}"
+        return f"Song: {self.song_id}, Artist: {self.song_artist.artist_name}"
 
 
 class User(models.Model):
