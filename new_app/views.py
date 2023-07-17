@@ -8,6 +8,9 @@ import magic
 from .models import Song
 import boto3
 from django.conf import settings
+from botocore.exceptions import ClientError
+from requests_aws4auth import AWS4Auth
+import requests
 
 
 # Create your views here.
@@ -32,6 +35,23 @@ def home(request):
         
     return render(request, "home.html", context)
 
+def get_object_url(bucket_name, key):
+    session = boto3.Session(
+        aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+        region_name=settings.AWS_REGION
+    )
+    s3_client = session.client('s3')
+    response = s3_client.generate_presigned_url(
+        'get_object',
+        Params={
+            'Bucket': bucket_name,
+            'Key': key
+        },
+        ExpiresIn=settings.OBJECT_URL_EXPIRATION_SECONDS
+    )
+    return response
+
 def artist(request):
     if request.method == 'POST':
         artist_name = request.POST.get('artist_name')
@@ -49,16 +69,26 @@ def artist(request):
         s3_key = f'audio/{songaudio_file.name}'
         s3.upload_fileobj(songaudio_file, settings.AWS_STORAGE_BUCKET_NAME, s3_key)
 
-        # Generate the URN
-        songaudio_file_urn = f's3://{settings.AWS_STORAGE_BUCKET_NAME}/{s3_key}'
+        # Generate the object URL
+        try:
+            s3_resource = boto3.resource('s3', aws_access_key_id=settings.AWS_ACCESS_KEY_ID, aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
+            obj_url = s3_resource.meta.client.generate_presigned_url(
+                'get_object',
+                Params={'Bucket': settings.AWS_STORAGE_BUCKET_NAME, 'Key': s3_key},
+                ExpiresIn=3600 
+            )
+        except ClientError as e:
+           
+            return render(request, "error.html", {'error_message': str(e)})
 
-        # Create the Artist object
         artist, created = Artist.objects.get_or_create(artist_name=artist_name)
 
-        # Create the Song object
-        song = Song.objects.create(song_artist=artist, song_name=song_name, popularity=0, songaudio_file_urn=songaudio_file_urn)
+        song = Song.objects.create(song_artist=artist, song_name=song_name, popularity=0, songaudio_file_urn=obj_url)
 
     return render(request, "artist_page.html")
+
+def test(request):
+    return render(request, "test.html")
 
     
 def albums(request):

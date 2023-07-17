@@ -11,5 +11,6 @@ urlpatterns = [
     path("artist",views.artist, name = "liked_songs"),
     path("login",views.login, name = "login"),
     path("logout", views.logout, name = "logout"),
-    path("search", views.search, name = "search")
+    path("search", views.search, name = "search"),
+    path("test", views.test, name = "test")
 ]
