@@ -1,4 +1,4 @@
-from django.shortcuts import render, reverse
+from django.shortcuts import render, reverse , redirect
 from django.shortcuts import HttpResponse
 from django.http import HttpResponseRedirect
 from .models import User
@@ -11,8 +11,7 @@ from django.conf import settings
 from botocore.exceptions import ClientError
 from requests_aws4auth import AWS4Auth
 import requests
-
-
+import logging
 # Create your views here.
 def home(request):
     global context
@@ -34,59 +33,56 @@ def home(request):
             print(context['name'])
         
     return render(request, "home.html", context)
+logger = logging.getLogger(__name__)
 
-def get_object_url(bucket_name, key):
-    session = boto3.Session(
+def upload_audio_to_s3(file, s3_key):
+    s3 = boto3.client(
+        's3',
         aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
-        region_name=settings.AWS_REGION
+        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
     )
-    s3_client = session.client('s3')
-    response = s3_client.generate_presigned_url(
-        'get_object',
-        Params={
-            'Bucket': bucket_name,
-            'Key': key
-        },
-        ExpiresIn=settings.OBJECT_URL_EXPIRATION_SECONDS
-    )
-    return response
+    try:
+        s3.upload_fileobj(file, settings.AWS_STORAGE_BUCKET_NAME, s3_key)
+        return True
+    except Exception as e:
+        logger.error(f"Error uploading audio to S3: {e}")
+        return False
 
 def artist(request):
     if request.method == 'POST':
         artist_name = request.POST.get('artist_name')
         song_name = request.POST.get('song_name')
         songaudio_file = request.FILES.get('songaudio_file')
+        duration = request.POST.get('duration')
 
-        extension = magic.from_buffer(songaudio_file.read(), mime=True).split("/")[1]
-        print(extension)
+        # Check if the uploaded file is empty
+        if not songaudio_file:
+            return render(request, "error.html", {'error_message': 'No audio file selected.'})
 
-        if extension not in ["mpeg", "mp3", "wav", "midi"]:
-            return render(request, "home.html")
-
-        # Upload audio file to S3
-        s3 = boto3.client('s3', aws_access_key_id=settings.AWS_ACCESS_KEY_ID, aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
-        s3_key = f'audio/{songaudio_file.name}'
-        s3.upload_fileobj(songaudio_file, settings.AWS_STORAGE_BUCKET_NAME, s3_key)
-
-        # Generate the object URL
-        try:
-            s3_resource = boto3.resource('s3', aws_access_key_id=settings.AWS_ACCESS_KEY_ID, aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
-            obj_url = s3_resource.meta.client.generate_presigned_url(
-                'get_object',
-                Params={'Bucket': settings.AWS_STORAGE_BUCKET_NAME, 'Key': s3_key},
-                ExpiresIn=3600 
-            )
-        except ClientError as e:
-           
-            return render(request, "error.html", {'error_message': str(e)})
-
+        # Save the Artist object
         artist, created = Artist.objects.get_or_create(artist_name=artist_name)
 
-        song = Song.objects.create(song_artist=artist, song_name=song_name, popularity=0, songaudio_file_urn=obj_url)
+        # Save the Song object
+        song = Song.objects.create(
+            song_artist=artist,
+            song_name=song_name,
+            popularity=0,
+            songaudio_file_urn=duration  # You can change this field to store the duration if needed.
+        )
 
-    return render(request, "artist_page.html")
+        # Upload audio file to S3
+        s3_key = f'audio/{songaudio_file.name}'
+        if upload_audio_to_s3(songaudio_file, s3_key):
+            song.songaudio_file_urn = s3_key
+            song.save()
+        else:
+            # Handle the case when the audio file upload to S3 fails
+            song.delete()
+            return render(request, "error.html", {'error_message': 'Error uploading audio to S3.'})
 
+        return redirect('artist_page')  # Replace 'artist_page' with the URL name of the page you want to redirect to after successful submission
+
+    return render(request, "artist_page.html")  # Replace 'artist_form' with the name of your template for the artist form
 def test(request):
     return render(request, "test.html")
 
