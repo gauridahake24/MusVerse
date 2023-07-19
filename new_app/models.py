@@ -1,3 +1,6 @@
+import boto3
+from botocore.exceptions import ClientError
+from django.conf import settings
 from django.db import models
 from django.utils import timezone
 
@@ -27,6 +30,31 @@ class Song(models.Model):
 
     def __str__(self):
         return f"Song: {self.song_id}, Artist: {self.song_artist}"
+    
+    def save(self, *args, **kwargs):
+        if self.songaudio_file_urn:
+            # You don't need to read from songaudio_file_urn because it's just a URL string.
+            # The file content has been read earlier in the view before uploading to S3.
+            try:
+                s3_resource = boto3.resource(
+                    's3',
+                    aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                    aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
+                )
+                # Instead, use the songaudio_file_urn directly to generate the object URL
+                obj_url = s3_resource.meta.client.generate_presigned_url(
+                    'get_object',
+                    Params={'Bucket': settings.AWS_STORAGE_BUCKET_NAME, 'Key': self.songaudio_file_urn},
+                    ExpiresIn=3600
+                )
+                self.songaudio_file_urn = obj_url
+            except ClientError as e:
+                # Handle any errors that might occur during URL generation
+                raise e
+
+        # Call the original save method to save the Song object to the database
+        super(Song, self).save(*args, **kwargs)
+
 
 
 class User(models.Model):
