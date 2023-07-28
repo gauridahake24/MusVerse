@@ -9,7 +9,7 @@ class Artist(models.Model):
     artist_name = models.CharField(max_length=30)
 
     def __str__(self):
-        return str(self.artist_id)
+        return str(self.artist_name)
 
 
     def get_song_duration(self):
