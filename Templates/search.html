@@ -1,87 +1,20 @@
+{% extends "navbar.html" %}
 {% load static %}
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Musverse</title>
-    <link rel="icon" type="image/x-icon" href="{% static 'my_fav.ico' %}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <style>
-      body {
-        background-color: black;
-      }
-      div {
-        color: white;
-      }
-    </style>      
-  </head>
-  <body>
-    <nav class="navbar navbar-expand-lg bg-dark">
-      <div class="container-fluid" style="margin-top: 0.5rem;margin-bottom: 0.5rem;">
-          <a class="navbar-brand" href="#" style="color: white;">MusVerse</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                  <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="#" style="color: white;">Home</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="#" style="color: white;">Playlist</a>
-                  </li>
+{% block content%}
 
-                  <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="{% url 'logout' %}" style="color: white;">Logout</a>
-                  </li>
-
-                  <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="#" style="color: white;">Liked songs</a>
-                  </li>
-                  <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white;">
-                Account
-              </a>
-                      <ul class="dropdown-menu">
-                          <li><a class="dropdown-item" href="#" style="color: black;">My Account</a></li>
-                          <li><a class="dropdown-item" href="#" style="color: black;">Edit Account</a></li>
-                      </ul>
-                  
-              </ul>
-              <form class="d-flex" role="search" action="/search" method="post">
-                  {% csrf_token %}
-                  <input class="form-control me-2" type="search" placeholder="Your Favourite Song" aria-label="Search" name="val"/>
-                  <button class="btn btn-outline-success" type="submit">
-              Search
-            </button>
-              </form>
-              <div class="profile">
-
-                  <div class="username">
-                      <h4 style="color: white; margin-left: 1rem; font-size: medium;margin-right: 1rem;margin-top: 0.5rem;">
-
-                          {% if username %}
-                          {{username}}
-                          {% else %}
-                          <a href="/login">Login</a>
-                          {% endif %}
-
-                      </h4>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </nav>
     <div class = "text-center">
       <h1 class="display-4"> Search Results </h1>
       {% if data %}
       {% for ele in data %}
-        <div class="container d-flex align-items-center justify-content-center my-4 text-center">
-          Song: {{ele.Song}}<br>
-          Artist: {{ele.Artist}}<br>
-          Popularity: {{ele.Popularity}}<br>
-        </div>
+      <div class="container d-flex align-items-center justify-content-center my-4 text-center">
+        <p style="color: white; margin: 0;">
+            Song: {{ ele.Song }}<br>
+            Artist: {{ ele.Artist }}<br>
+            Popularity: {{ ele.Popularity }}
+        </p>
+    </div>
+    
+    
       {% endfor %}
       
       {% else %}
@@ -90,6 +23,4 @@
 
     </div>
     
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-  </body>
-</html>
+    {% endblock %}
