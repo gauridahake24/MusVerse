@@ -56,8 +56,9 @@
                         </ul>
                     </li>
                 </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Your Favourite Song" aria-label="Search" />
+                <form class="d-flex" role="search" action="/search" method="post">
+                    {% csrf_token %}
+                    <input class="form-control me-2" type="search" placeholder="Your Favourite Song" aria-label="Search" name="val"/>
                     <button class="btn btn-outline-success" type="submit">
                 Search
               </button>
