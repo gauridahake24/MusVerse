@@ -1,0 +1,31 @@
+{% extends "navbar.html" %}
+{% load static %}
+{% block content%}
+
+<div class="container d-flex align-items-center justify-content-center my-4" style="margin: 100px;">
+    <div class="text-center">
+        {% if url %}
+        
+        <div style="color:aliceblue">
+            Song Name: {{Song}}
+        </div>
+        <div style="color:aliceblue">
+            Artist: {{Artist}}
+        </div>
+
+        <div style="color:aliceblue">
+            <audio controls>
+                <source src="{{url}}">
+            </audio>
+        </div>
+
+        {% else %}
+
+        <h1 style="color: aliceblue;">Audio not Found</h1>
+
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}
