@@ -63,7 +63,22 @@ class User(models.Model):
     
     def __str__(self):
         return str(self.userid)
+    
+class liked_songs(models.Model):
+    liked_songs = models.ManyToManyField(Song)
+    uid = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_id_ref')
 
+    def get_liked_songs(self):
+        return self.liked_songs.all()
+
+    def add_song(self, song):
+        self.liked_songs.add(song)
+
+    def remove_song(self, song):
+        self.liked_songs.remove(song)
+
+    def get_user(self):
+        return self.uid
 
 
 # class guest(models.Model):

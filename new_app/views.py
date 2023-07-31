@@ -2,7 +2,7 @@ from django.shortcuts import render, reverse , redirect
 from django.shortcuts import HttpResponse
 from django.http import HttpResponseRedirect
 from .models import User
-from .models import Artist
+from .models import Artist, liked_songs
 # from datetime import timedelta
 # import magic
 from .models import Song
@@ -78,6 +78,16 @@ def home(request):
 logger = logging.getLogger(__name__)
 
 
+def liked_songs(request):
+    if request.method == 'POST':
+        song_id = request.POST.get('song_id')
+        if song_id:
+            song = Song.objects.get(pk=song_id)
+            user = request.user
+            liked_song, created = LikedSong.objects.get_or_create(uid=user)
+            liked_song.liked_songs.add(song)
+            return redirect('liked-songs')  
+    return redirect('home') 
 
 def upload_to_firestore(request, fileName):
     Fire_app = firebase_admin.initialize_app(cred,config)
@@ -170,7 +180,7 @@ def playlist(request):
     return HttpResponse("hello this is playlist")
 
 def liked_songs(request):
-    return HttpResponse("hello this is liked songs")
+    return render(request, "liked_songs.html")
 
 def login(request):
     if request.method == 'POST':
