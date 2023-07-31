@@ -1,31 +1,5 @@
 {% extends "navbar.html" %}
 {% load static %}
-<<<<<<< HEAD
-{% block content%}
-
-    <div class = "text-center">
-      <h1 class="display-4"> Search Results </h1>
-      {% if data %}
-      {% for ele in data %}
-      <div class="container d-flex align-items-center justify-content-center my-4 text-center">
-        <p style="color: white; margin: 0;">
-            Song: {{ ele.Song }}<br>
-            Artist: {{ ele.Artist }}<br>
-            Popularity: {{ ele.Popularity }}
-        </p>
-    </div>
-    
-    
-      {% endfor %}
-      
-      {% else %}
-      <h2>No Valid Results</h2>
-      {% endif %}
-
-    </div>
-    
-    {% endblock %}
-=======
 {% block content %}
 
 <style>
@@ -73,4 +47,3 @@
   </div>
 </div>
 {% endblock %}
->>>>>>> b685040b3c1db12772f15910eb0402eaa8f5c5d4

@@ -63,8 +63,10 @@
         {% else %}
         <h4 style="color: #fff;">No song is currently playing.</h4>
         {% endif %}
+        <button class="btn btn-success like-button mt-3 mb-4">add to Liked song</button>
     </div>
 </div>
+
 
 <div class="player">
     {% if Song %}
@@ -73,5 +75,6 @@
     </audio>
     {% endif %}
 </div>
+
 
 {% endblock %}

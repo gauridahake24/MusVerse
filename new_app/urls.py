@@ -13,4 +13,6 @@ urlpatterns = [
     path("logout", views.logout, name = "logout"),
     path("search", views.search, name = "search"),
     path("play", views.play, name = "play"),
+    path('liked-songs', views.liked_songs, name='liked-songs'),
+    
 ]
