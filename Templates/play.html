@@ -1,31 +1,77 @@
 {% extends "navbar.html" %}
 {% load static %}
-{% block content%}
+{% block content %}
 
-<div class="container d-flex align-items-center justify-content-center my-4" style="margin: 100px;">
-    <div class="text-center">
-        {% if url %}
-        
-        <div style="color:aliceblue">
-            Song Name: {{Song}}
-        </div>
-        <div style="color:aliceblue">
-            Artist: {{Artist}}
-        </div>
+<style>
+    .player {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #222;
+        padding: 10px 20px;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
 
-        <div style="color:aliceblue">
-            <audio controls>
-                <source src="{{url}}">
-            </audio>
-        </div>
+    .song-image {
+        width: 30rem;
+        height: 20rem;
+        object-fit: cover;
+        margin-top: 5rem;
+        /* Set margin-top value to adjust the distance between the navbar and the image */
+    }
 
+    .player audio {
+        width: 100%;
+    }
+
+    .song-info-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 20vh;
+        flex-direction: column;
+        margin: 0;
+    }
+
+    /* Center the song-info div */
+    .container {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        height: 100vh;
+    }
+
+    /* Remove spacing between image and song info */
+    .song-info-container h4 {
+        margin: 0;
+    }
+</style>
+
+<div class="container d-flex justify-content-center">
+    <img class="song-image img-fluid" src="{% static 'music3.jpg' %}" alt="Song Image">
+    <div class="song-info-container text-center">
+        {% if Song %}
+        <h4 style="color: #fff;">
+            Now Playing: {{ Song }}<br>
+            Artist: {{ Artist }}
+        </h4>
         {% else %}
-
-        <h1 style="color: aliceblue;">Audio not Found</h1>
-
+        <h4 style="color: #fff;">No song is currently playing.</h4>
         {% endif %}
-
     </div>
+</div>
+
+<div class="player">
+    {% if Song %}
+    <audio controls>
+        <source src="{{ url }}">
+    </audio>
+    {% endif %}
 </div>
 
 {% endblock %}
