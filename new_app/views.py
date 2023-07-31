@@ -46,13 +46,22 @@ config = {
 
 
 # Create your views here.
-def home(request):
-    global context
-    context = {}
+def session_status(request):
     if 'login_status' in request.COOKIES and 'username' in request.COOKIES:
         context['login_status'] = request.COOKIES.get('login_status')
         context['username'] = request.COOKIES['username']
-        return render(request, "home.html", context)
+
+    
+
+
+def home(request):
+    global context
+    context = {}
+    session_status(request)
+    # if 'login_status' in request.COOKIES and 'username' in request.COOKIES:
+    #     context['login_status'] = request.COOKIES.get('login_status')
+    #     context['username'] = request.COOKIES['username']
+    #     return render(request, "home.html", context)
 
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -102,6 +111,7 @@ def delete_file(file_path):
 
 
 def artist(request):
+    session_status(request)
     if request.method == 'POST':
         artist_name = request.POST.get('artist_name')
         song_name = request.POST.get('song_name')
@@ -137,11 +147,20 @@ def artist(request):
 
     #     return redirect('artist_page')  # Replace 'artist_page' with the URL name of the page you want to redirect to after successful submission
 
-    return render(request, "artist_page.html")  # Replace 'artist_form' with the name of your template for the artist form
+    return render(request, "artist_page.html", context)  # Replace 'artist_form' with the name of your template for the artist form
 
 
-def test(request):
-    return render(request, "test.html")
+def play(request):
+    context.clear()
+    session_status(request)
+    if request.method == "POST":
+        output = request.POST.get("submit").split(",")
+        context["Song"] = output[0]
+        context["Artist"] = output[1]
+        context["url"] = output[2]
+        print(context)
+    
+    return render(request, "play.html", context)
 
     
 def albums(request):
@@ -176,7 +195,9 @@ def logout(request):
     return response
 
 def search(request):
-    context = {}
+    # context = {}
+    context.clear()
+    session_status(request)
 
     if request.method == 'POST':
         val = request.POST.get('val')
@@ -185,9 +206,10 @@ def search(request):
             context['data'] = []
             arr = Song.objects.filter(song_name__icontains = val).order_by('-popularity')
             for i in arr:
-                temp = {"Song": i.song_name, "Artist": i.song_artist, "Popularity": i.popularity}
+                temp = {"Song": i.song_name, "Artist": i.song_artist, "Popularity": i.popularity, "url":i.songaudio_file_urn}
                 context['data'].append(temp)
-            print(context)
+                print(i.song_artist)
+            # print(context)
             return render(request, "search.html", context)
     
 
