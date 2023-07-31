@@ -2,30 +2,48 @@
 {% load static %}
 {% block content %}
 
-<div class = "text-center">
-  <h1 class="display-4"> Search Results </h1>
-  {% if data %}
-  {% for ele in data %}
-  <div class="container d-flex align-items-center justify-content-center my-4 text-center" style="color: aliceblue;">
-    Song: {{ele.Song}}
-  </div>
-  <div class="container d-flex align-items-center justify-content-center my-4 text-center" style="color: aliceblue;">
-    Artist: {{ele.Artist}}
-  </div>
+<style>
+  .custom-card-header {
+    background-color: #007bff; /* Blue header */
+  }
 
-  <div class="container d-flex align-items-center justify-content-center my-4 text-center" style="color: aliceblue;">
-    
-  </div>
-  <form action="/play" method="post">
-    {% csrf_token %}
-    <button type="submit" name="submit" value="{{ele.Song}}, {{ele.Artist}}, {{ele.url}}">Play</button>
-  </form>
-  {% endfor %}
-  
-  {% else %}
-  <h2>No Valid Results</h2>
-  {% endif %}
+  .custom-card {
+    background-color: #343a40; /* Dark background */
+    border-color: #343a40; /* Dark border */
+  }
 
+  .custom-button {
+    background-color: #28a745; /* Green button */
+    border-color: #28a745; /* Green border */
+  }
+
+  .custom-button:hover {
+    background-color: #218838; /* Darker green on hover */
+    border-color: #1e7e34; /* Darker green border on hover */
+  }
+</style>
+
+<div class="container d-flex align-items-center justify-content-center">
+  <div class="text-center">
+    <h1 class="display-4"> Search Results </h1>
+    {% if data %}
+    {% for ele in data %}
+    <div class="card text-white custom-card mb-3 mt-5" style="max-width: 18rem;">
+      <div class="card-header custom-card-header">Song</div>
+      <div class="card-body">
+        <h5 class="card-title">{{ ele.Song }}</h5>
+        <p class="card-text">Artist: {{ ele.Artist }}</p>
+        <form action="/play" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="submit" value="{{ ele.Song }},{{ ele.Artist }},{{ ele.url }}">
+          <button class="btn custom-button" type="submit">Play</button>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <h2>No Valid Results</h2>
+    {% endif %}
+  </div>
 </div>
-
 {% endblock %}
