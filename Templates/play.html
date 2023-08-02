@@ -13,15 +13,13 @@
         color: #fff;
         display: flex;
         align-items: center;
-        margin-bottom: 2rem;
     }
 
     .song-image {
-        width: 30rem;
-        height: 20rem;
+        height: auto;
         object-fit: cover;
-        margin-top: 5rem;
-        /* Set margin-top value to adjust the distance between the navbar and the image */
+        margin-top: 2rem;
+        margin-bottom: 1rem;
     }
 
     .player audio {
@@ -29,21 +27,16 @@
     }
 
     .song-info-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 20vh;
-        flex-direction: column;
-        margin: 0;
+        margin-bottom: 2rem;
     }
 
-    /* Center the song-info div */
+    /* Center the song-info div and player */
     .container {
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-        align-items: center;
         height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
     }
 
     /* Remove spacing between image and song info */
@@ -52,29 +45,31 @@
     }
 </style>
 
-<div class="container d-flex justify-content-center">
-    <img class="song-image img-fluid" src="{% static 'music3.jpg' %}" alt="Song Image">
-    <div class="song-info-container text-center">
-        {% if Song %}
-        <h4 style="color: #fff;">
-            Now Playing: {{ Song }}<br>
-            Artist: {{ Artist }}
-        </h4>
-        {% else %}
-        <h4 style="color: #fff;">No song is currently playing.</h4>
-        {% endif %}
-        <button class="btn btn-success like-button mt-3 mb-4">add to Liked song</button>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-sm-8">
+            <img class="song-image img-fluid" src="{% static 'music3.jpg' %}" alt="Song Image">
+            <div class="song-info-container text-center">
+                {% if Song %}
+                <h4 style="color: #fff;">
+                    Now Playing: {{ Song }}<br>
+                    Artist: {{ Artist }}
+                </h4>
+                {% else %}
+                <h4 style="color: #fff;">No song is currently playing.</h4>
+                {% endif %}
+                <button class="btn btn-success like-button mt-3">Add to Liked Songs</button>
+            </div>
+        </div>
     </div>
 </div>
 
-
-<div class="player">
+<div class="player bg-dark p-2 text-white">
     {% if Song %}
-    <audio controls>
+    <audio controls class="w-100">
         <source src="{{ url }}">
     </audio>
     {% endif %}
 </div>
-
 
 {% endblock %}
