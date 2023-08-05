@@ -14,5 +14,7 @@ urlpatterns = [
     path("search", views.search, name = "search"),
     path("play", views.play, name = "play"),
     path('liked-songs', views.liked_songs, name='liked-songs'),
+    path('my_account', views.my_account, name='my_account'),
+    path('my_uploads', views.my_uploads, name='my_uploads'),
     
 ]

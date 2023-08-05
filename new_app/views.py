@@ -132,6 +132,12 @@ def playlist(request):
 def liked_songs(request):
     return render(request, "liked_songs.html")
 
+def my_account(request):
+    return render(request, "my_account.html")
+
+def my_uploads(request):
+    return render(request, "my_uploads.html")
+
 def login(request):
     if request.method == 'POST':
         email = request.POST.get('email')
