@@ -78,7 +78,7 @@ def songUpload(filename):
 def addSong(data:dict, filename:str):
     data['url'] = songUpload(filename)
     id = getNextId('Song')
-    increment(type, id)
+    increment("Song", id)
     app = firebase_admin.initialize_app(cred, config)
     db = firestore.client()
     db.collection('Music').document(str(id)).set(data)
@@ -89,7 +89,7 @@ def addSong(data:dict, filename:str):
 def addUser(data:dict):
     
     id = getNextId("User")
-    increment(type, id)
+    increment("User", id)
     app = firebase_admin.initialize_app(cred, config)
     db = firestore.client()
     db.collection("User Data").document(str(id)).set(data)
