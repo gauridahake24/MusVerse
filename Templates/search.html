@@ -35,7 +35,7 @@
         <p class="card-text">Artist: {{ ele.Artist }}</p>
         <form action="/play" method="post">
           {% csrf_token %}
-          <input type="hidden" name="submit" value="{{ ele.Song }},{{ ele.Artist }},{{ ele.url }}">
+          <input type="hidden" name="submit" value="{{ ele.Name }},{{ ele.Artist }},{{ ele.url }}">
           <button class="btn custom-button" type="submit">Play</button>
         </form>
       </div>
